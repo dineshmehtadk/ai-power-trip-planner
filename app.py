@@ -7,9 +7,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
-
-from backend import run_travel_agent
-
+from backend import run_travel_agent,resume_travel_agent
 
 # This is kept from the original project to allow the existing synchronous
 # agent functions to call async MCP helpers inside FastAPI.
@@ -71,7 +69,7 @@ async def travel_planner(request_data: TravelRequest):
                 },
             )
 
-        result = run_travel_agent(
+        result =  run_travel_agent(
             user_input=user_message,
             thread_id=request_data.thread_id,
         )
@@ -107,14 +105,12 @@ async def approve_travel_plan(request_data: ApprovalRequest):
                     "error": "Please provide revision feedback when rejecting the draft.",
                 },
             )
-        
-        result= "test"
 
-        # result = resume_travel_agent(
-        #     thread_id=request_data.thread_id,
-        #     approved=request_data.approved,
-        #     feedback=request_data.feedback,
-        # )
+        result =await  resume_travel_agent(
+            thread_id=request_data.thread_id,
+            approved=request_data.approved,
+            feedback=request_data.feedback,
+        )
 
         return JSONResponse(
             content={

@@ -1,14 +1,17 @@
-from tools.flight_tool import search_flights
-from backend import run_travel_agent
 
-# rs = search_flights("Plan a 2 days Dubai trip from India")
-# print(rs)
+#openai/gpt-oss-120b
 
+import asyncio
+from mcp_client import weather_mcp_search,forecast_mcp_search
 
-user_input = input('Enter travel request')
+async def main():
+    try:
+        result = await forecast_mcp_search("New Delhi")
+        print("Weather result:")
+        print(result)
+    except Exception as exc:
+        import traceback
+        traceback.print_exc()
 
-response = run_travel_agent(user_input=user_input,thread_id='test_user')
-
-
-print("\n FINAL RESPONSE : \n")
-print(response["answer"])
+if __name__ == "__main__":
+    asyncio.run(main())
